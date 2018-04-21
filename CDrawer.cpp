@@ -9,10 +9,13 @@ CDrawer::CDrawer()
 
 CDrawer::~CDrawer()
 {
+	wglMakeCurrent(pDC->GetSafeHdc(), 0);
+	wglDeleteContext(wglGetCurrentContext());
 }
 
 void CDrawer::Draw()
 {
+	glClearColor(0.f, 0.f, 0.f, 0.5);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
 
 	glMatrixMode(GL_PROJECTION);
@@ -21,9 +24,8 @@ void CDrawer::Draw()
 
 	glTranslated(0.0f, 0.0f, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glLoadIdentity();	
 	
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glRotated(*angleX, 1, 0, 0);
@@ -31,44 +33,7 @@ void CDrawer::Draw()
 	glScaled(*zoom, *zoom, *zoom);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_QUADS);//
 	glBegin(GL_QUADS);
-	////передняя
-	//glColor3d(255, 0, 0);
-	//glVertex3d(-5.0, -5.0, 5.0); //1
-	//glVertex3d(5.0, -5.0, 5.0);  //2
-	//glVertex3d(5.0, 5.0, 5.0);//3
-	//glVertex3d(-5.0, 5.0, 5.0);//4
-
-	//												   //верх
-	//glColor3d(255, 255, 0);
-	//glVertex3d(-5.0, 5.0, 5.0); //1
-	//glVertex3d(5.0, 5.0, 5.0); //2
-	//glVertex3d(5.0, 5.0, -5.0); //3
-	//glVertex3d(-5.0, 5.0, -5.0); //4
-	//												 //задняя
-	//glColor3d(255, 0, 0);
-	//glVertex3d(5.0, -5.0, -5.0); //1
-	//glVertex3d(-5.0, -5.0, -5.0); //2
-	// glVertex3d(-5.0, 5.0, -5.0); //3
-	// glVertex3d(5.0, 5.0, -5.0); //4
-
-	//												//низ
-	//glColor3d(0, 0, 255);
-	//glVertex3d(5.0, -5.0, 5.0); //1
-	//glVertex3d(-5.0, -5.0, 5.0); //2
-	// glVertex3d(-5.0, -5.0, -5.0); //3
-	// glVertex3d(5.0, -5.0, -5.0); //4
-	//												 //право
-	//glColor3d(0, 255, 0);
-	//glVertex3d(5.0, -5.0, 5.0); //1
-	// glVertex3d(5.0, -5.0, -5.0); //2
-	//glVertex3d(5.0, 5.0, -5.0); //3
-	//glVertex3d(5.0, 5.0, 5.0); //4
-	//													 //лево
-	//glColor3d(255, 0, 255); 
-	//glVertex3d(-5.0, -5.0, -5.0); //1
-	//glVertex3d(-5.0, -5.0, 5.0); //2
-	//glVertex3d(-5.0, 5.0, 5.0); //3
-	//glVertex3d(-5.0, 5.0, -5.0); //4
+	
 	for (int i = 0; i < points[0].size(); i++)
 	{
 		for (int j = 0; j < points[0][i].size(); j++)
@@ -97,4 +62,67 @@ void CDrawer::Draw()
 	glEnd();
 	glFinish();
 	SwapBuffers(wglGetCurrentDC());
+}
+
+void CDrawer::InitiateOPGL(CRect & rt, CDC* pdc)
+{
+	rect = rt;
+	pDC = pdc;
+	HGLRC hrc; //rendering context for OpGL(просчитывающий контекст для OpGl)
+	if (!bSetupPixelFormat())
+	{
+		return;
+	}
+
+	hrc = wglCreateContext(pDC->GetSafeHdc()); //инициализирую его необходимым cdc
+	ASSERT(hrc != NULL); //если контекст проинициализирован, то продолжаем программу, иначе немедленное завершение
+
+	wglMakeCurrent(pDC->GetSafeHdc(), hrc); //выставляю созданный контекст рисования
+
+	glViewport(0, 0, rect.right, rect.bottom);
+
+	glCullFace(GL_FRONT);
+
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+
+}
+
+BOOL CDrawer::bSetupPixelFormat()
+{
+	static PIXELFORMATDESCRIPTOR pfd =
+	{
+		sizeof(PIXELFORMATDESCRIPTOR),  // size of this pfd
+		1,                              // version number
+		PFD_DRAW_TO_WINDOW |            // support window
+		PFD_SUPPORT_OPENGL |          // support OpenGL
+		PFD_DOUBLEBUFFER,             // double buffered
+		PFD_TYPE_RGBA,                  // RGBA type
+		24,                             // 24-bit color depth
+		0, 0, 0, 0, 0, 0,               // color bits ignored
+		0,                              // no alpha buffer
+		0,                              // shift bit ignored
+		0,                              // no accumulation buffer
+		0, 0, 0, 0,                     // accum bits ignored
+		32,                             // 32-bit z-buffer
+		0,                              // no stencil buffer
+		0,                              // no auxiliary buffer
+		PFD_MAIN_PLANE,                 // main layer
+		0,                              // reserved
+		0, 0, 0                         // layer masks ignored
+	};
+	int pixelformat;
+	if ((pixelformat = ChoosePixelFormat(pDC->GetSafeHdc(), &pfd)) == 0)
+	{
+		return FALSE;
+	}
+
+	if (SetPixelFormat(pDC->GetSafeHdc(), pixelformat, &pfd) == FALSE)
+	{
+		return FALSE;
+	}
+	return TRUE;
 }
