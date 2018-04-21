@@ -9,7 +9,7 @@ public:
 	CDrawer();
 	~CDrawer();
 
-	double *angleX, *angleY;
+	double *angleX, *angleY, *zoom;
 	void Draw();
 };
 

@@ -26,6 +26,7 @@ void CDrawer::Draw()
 	glLoadIdentity();
 	glRotated(*angleX, 1, 0, 0);
 	glRotated(*angleY, 0, 1, 0);
+	glScaled(*zoom, *zoom, *zoom);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_QUADS);//
 	glBegin(GL_QUADS);
 	//передн€€
