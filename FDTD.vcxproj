@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="CDrawer.h" />
     <ClInclude Include="FDTD.h" />
+    <ClInclude Include="fdtd2d.h" />
     <ClInclude Include="FDTDDlg.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
