@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <omp.h> 
 using namespace std;
 struct Detector
 {
@@ -177,6 +178,7 @@ public:
 		T = T + ddt;
 		// ---- Start of the Main FDTD loop ---- 
 		//Dz
+
 		for(int j=1; j < nhght; j++ ) 
 		{
 			for(int i=1; i < nwdth; i++ ) 
@@ -238,6 +240,7 @@ public:
 		}*/
 		
 		//Ez
+
 		for (int j=1; j<nhght-1;j++) 
 		{
 			for (int i=1; i < nwdth-1; i++ ) 
@@ -246,6 +249,7 @@ public:
 			} 
 		}
 		// Calculate the Hx field
+
 		for (int j=0; j < nhght-1; j++ ) 
 		{
 			for (int i=0; i < nwdth; i++ ) 
@@ -256,6 +260,7 @@ public:
 			} 
 		}
 		//Calculate the Hy field
+
 		for (int j=0; j <= nhght-1; j++ ) 
 		{
 			for (int i=0; i < nwdth-1; i++ ) 

@@ -22,7 +22,7 @@ void CDrawer::Draw()
 	glLoadIdentity();
 	glOrtho(-3, 3, -3, 3, -3, 3);
 
-	glTranslated(0.5f, 0.5f, 0.0f);
+	glTranslated(0.f, 0.f, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();	
 	
