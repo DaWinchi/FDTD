@@ -59,13 +59,17 @@ void CDrawer::Draw()
 			{
 				jup -= 2;
 			}
-			if (points[0][i][j].z<0) glColor3d(0, 0, 255* points[0][i][j].z/min); else glColor3d(255 * points[0][i][j].z / max, 0, 0);
+			if (points[0][i][j].z<0) glColor3f(0, 0, points[0][i][j].z/min);
+			else glColor3f(points[0][i][j].z / max, 0, 0);
 			glVertex3d(points[0][i][j].x , points[0][i][j].y,points[0][i][j].z);
-			if (points[0][iright][j].z<0) glColor3d(0, 0, 255 * points[0][iright][j].z / min); else glColor3d(255 * points[0][iright][j].z / max, 0, 0);
+			if (points[0][iright][j].z<0) glColor3f(0, 0, points[0][iright][j].z / min); 
+			else glColor3f(points[0][iright][j].z / max, 0, 0);
 			glVertex3d(points[0][iright][j].x, points[0][iright][j].y, points[0][iright][j].z);
-			if (points[0][iright][jup].z<0) glColor3d(0, 0, 255 * points[0][iright][jup].z / min); else glColor3d(255 * points[0][iright][jup].z / max, 0, 0);
+			if (points[0][iright][jup].z<0) glColor3f(0, 0,points[0][iright][jup].z / min); 
+			else glColor3f(points[0][iright][jup].z / max, 0, 0);
 			glVertex3d(points[0][iright][jup].x, points[0][iright][jup].y, points[0][iright][jup].z);
-			if (points[0][i][jup].z<0) glColor3d(0, 0, 255 * points[0][i][jup].z / min); else glColor3d(255 * points[0][i][jup].z / max, 0, 0);
+			if (points[0][i][jup].z<0) glColor3f(0, 0, points[0][i][jup].z / min); 
+			else glColor3f(points[0][i][jup].z / max, 0, 0);
 			glVertex3d(points[0][i][jup].x, points[0][i][jup].y, points[0][i][jup].z);
 		}
 	}

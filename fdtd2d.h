@@ -34,8 +34,11 @@ class fdtd2d
 public:
 	int nwdth; int nhght;
 	vector<Detector> dats;
-	fdtd2d(double width,int nwidth, double height,int nheight, int npml)
+	//положение источников
+	double * x1; double* x2; double* y1; double* y2;
+	fdtd2d(double width,int nwidth, double height,int nheight, int npml, double *x1, double *x2, double *y1, double *y2 )
 	{
+		this->x1 = x1; this->x2 = x2; this->y1 = y1; this->y2 = y2;
 		pi=3.14159;
 		dats.resize(360);
 		for(int i =0;i<360;i++)
@@ -209,10 +212,10 @@ public:
 		/*2 точечных источнечичнек*/
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//pulse = 1. / (1. + exp(-0.1*(T - 50)))*sin(2 * pi * 25000 * T);
-		pulse = sin(2 * 0.05 *  pi * T);
-		yee[0.33*nwdth][0.33*nhght].dz += pulse;
+		pulse = 5*sin(2 * 0.03 *  pi * T);
+		yee[*x1*nwdth][*y1*nhght].dz += pulse;
 		//pulse = 1. / (1. + exp(-0.1*(T - 50)))*sin(2 * pi * 25000 * T);
-		yee[0.66*nwdth][0.66*nhght].dz += pulse;
+		yee[*x2*nwdth][*y2*nhght].dz += pulse;
 		/*4 точечных источнечичнек*/
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//pulse = 1. / (1. + exp(-0.1*(T - 50)))*sin(2 * pi * 25000 * T);
